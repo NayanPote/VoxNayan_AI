@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/vox_dark_bg"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="User Settings"
+        android:textColor="@color/vox_cyan"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/orbitron_bold"
+        android:gravity="center"
+        android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Your Name:"
+        android:textColor="@color/vox_white"
+        android:textSize="14sp"
+        android:fontFamily="@font/orbitron_medium"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/etUserName"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/edit_text_bg"
+        android:hint="Enter your name"
+        android:textColor="@color/vox_white"
+        android:textColorHint="@color/vox_gray"
+        android:fontFamily="@font/orbitron_regular"
+        android:padding="12dp"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Vox will use this name to personalize responses."
+        android:textColor="@color/vox_gray"
+        android:textSize="12sp"
+        android:fontFamily="@font/orbitron_regular"
+        android:gravity="center" />
+
+</LinearLayout>

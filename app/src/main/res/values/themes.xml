@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme -->
+    <style name="Theme.VoxNayanAI" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@color/vox_cyan</item>
+        <item name="colorPrimaryVariant">@color/vox_dark_cyan</item>
+        <item name="colorOnPrimary">@color/vox_white</item>
+
+        <!-- Secondary brand color -->
+        <item name="colorSecondary">@color/vox_blue</item>
+        <item name="colorSecondaryVariant">@color/vox_dark_blue</item>
+        <item name="colorOnSecondary">@color/vox_white</item>
+
+        <!-- Status bar and navigation bar -->
+        <item name="android:statusBarColor">@color/vox_dark_bg</item>
+        <item name="android:navigationBarColor">@color/vox_dark_bg</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+        <!-- Background colors -->
+        <item name="android:windowBackground">@color/vox_dark_bg</item>
+        <item name="colorSurface">@color/vox_surface</item>
+        <item name="colorOnSurface">@color/vox_white</item>
+
+        <!-- Error color -->
+        <item name="colorError">@color/vox_red</item>
+        <item name="colorOnError">@color/vox_white</item>
+
+        <!-- Enable edge-to-edge -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+    </style>
+
+    <!-- Vox Text Styles -->
+    <style name="VoxTitleText">
+        <item name="android:textColor">@color/vox_cyan</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/orbitron_bold</item>
+    </style>
+
+    <style name="VoxBodyText">
+        <item name="android:textColor">@color/vox_white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/orbitron_regular</item>
+    </style>
+
+    <style name="VoxSubtitleText">
+        <item name="android:textColor">@color/vox_gray</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/orbitron_medium</item>
+    </style>
+
+    <style name="VoxStatusText">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/orbitron_medium</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Button Styles -->
+    <style name="VoxPrimaryButton">
+        <item name="android:background">@drawable/voice_button_bg</item>
+        <item name="android:textColor">@color/vox_white</item>
+        <item name="android:fontFamily">@font/orbitron_medium</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="VoxSecondaryButton">
+        <item name="android:background">@drawable/control_button_bg</item>
+        <item name="android:textColor">@color/vox_cyan</item>
+        <item name="android:fontFamily">@font/orbitron_regular</item>
+    </style>
+
+</resources>
+
+<!--<resources xmlns:tools="http://schemas.android.com/tools">-->
+<!--    &lt;!&ndash; Base application theme. &ndash;&gt;-->
+<!--    <style name="Base.Theme.VoxNayanAI" parent="Theme.Material3.DayNight.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your light theme here. &ndash;&gt;-->
+<!--        &lt;!&ndash; <item name="colorPrimary">@color/my_light_primary</item> &ndash;&gt;-->
+<!--    </style>-->
+
+<!--    <style name="Theme.VoxNayanAI" parent="Base.Theme.VoxNayanAI" />-->
+<!--</resources>-->

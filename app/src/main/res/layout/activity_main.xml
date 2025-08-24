@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/jarvis_gradient_bg"
+    tools:context=".MainActivity">
+
+    <!-- Top Status Bar -->
+    <LinearLayout
+        android:id="@+id/statusBar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/status_bar_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvVoxTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/orbitron_bold"
+            android:text="VOX AI"
+            android:textColor="@color/vox_cyan"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/statusIndicator"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:background="@drawable/status_indicator_active"
+            android:layout_marginEnd="8dp" />
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/orbitron_medium"
+            android:text="ACTIVE"
+            android:textColor="@color/vox_green"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <!-- Central AI Circle -->
+    <FrameLayout
+        android:id="@+id/aiCircleContainer"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_margin="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/controlsContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statusBar">
+
+
+<!--        <com.airbnb.lottie.LottieAnimationView-->
+<!--            android:id="@+id/aiCoreAnimation"-->
+<!--            android:layout_width="200dp"-->
+<!--            android:layout_height="200dp"-->
+<!--            android:layout_centerInParent="true"-->
+<!--            app:lottie_rawRes="@raw/ai"-->
+<!--            app:lottie_autoPlay="true"-->
+<!--            app:lottie_loop="true"-->
+<!--            app:lottie_speed="1.0" />-->
+
+        <View
+            android:id="@+id/outerRing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/outer_ring" />
+
+        <View
+            android:id="@+id/middleRing"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_gravity="center"
+            android:background="@drawable/middle_ring" />
+
+        <ImageView
+            android:id="@+id/ivVoxCore"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:src="@drawable/logo3"
+            android:contentDescription="Vox AI Core"
+            android:scaleType="centerInside" />
+
+        <View
+            android:id="@+id/pulseEffect"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/pulse_effect"
+            android:visibility="invisible" />
+
+    </FrameLayout>
+
+    <!-- Response Text Area -->
+    <ScrollView
+        android:id="@+id/responseScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/response_bg"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/aiCircleContainer">
+
+        <TextView
+            android:id="@+id/tvResponse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/orbitron_regular"
+            android:gravity="center"
+            android:text="Hello, I am Vox. Your AI assistant is ready to help."
+            android:textColor="@color/vox_white"
+            android:textSize="14sp" />
+
+    </ScrollView>
+
+    <!-- Controls Container -->
+    <LinearLayout
+        android:id="@+id/controlsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginBottom="40dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- Voice Button -->
+        <ImageButton
+            android:id="@+id/btnVoice"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/voice_button_bg"
+            android:contentDescription="Voice Input"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_mic" />
+
+        <!-- Control Buttons Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btnSettings"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/control_button_bg"
+                android:contentDescription="Settings"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_settings" />
+
+            <ImageButton
+                android:id="@+id/btnChat"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/control_button_bg"
+                android:contentDescription="Chat History"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_chat" />
+
+            <ImageButton
+                android:id="@+id/btnPower"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/control_button_bg"
+                android:contentDescription="Power"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_power" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Listening Indicator -->
+    <LinearLayout
+        android:id="@+id/listeningIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/listening_indicator_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statusBar">
+
+        <View
+            android:id="@+id/wave1"
+            android:layout_width="4dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="4dp"
+            android:background="@color/vox_cyan" />
+
+        <View
+            android:id="@+id/wave2"
+            android:layout_width="4dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="4dp"
+            android:background="@color/vox_cyan" />
+
+        <View
+            android:id="@+id/wave3"
+            android:layout_width="4dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="4dp"
+            android:background="@color/vox_cyan" />
+
+        <View
+            android:id="@+id/wave4"
+            android:layout_width="4dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="4dp"
+            android:background="@color/vox_cyan" />
+
+        <View
+            android:id="@+id/wave5"
+            android:layout_width="4dp"
+            android:layout_height="20dp"
+            android:background="@color/vox_cyan" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:fontFamily="@font/orbitron_medium"
+            android:text="LISTENING..."
+            android:textColor="@color/vox_cyan"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

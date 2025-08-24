@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VoxNayanAI</string>
+
+    <!-- Main Activity Strings -->
+    <string name="vox_title">VOX AI</string>
+    <string name="status_active">ACTIVE</string>
+    <string name="status_offline">OFFLINE</string>
+    <string name="status_listening">LISTENING…</string>
+    <string name="status_processing">PROCESSING…</string>
+    <string name="status_speaking">SPEAKING…</string>
+
+    <!-- Welcome Messages -->
+    <string name="welcome_message">Hello, I am Vox. Your AI assistant is ready to help.</string>
+    <string name="welcome_user_message">Hello %s, I am Vox. Your AI assistant is ready to help.</string>
+
+    <!-- Button Content Descriptions -->
+    <string name="voice_button_desc">Voice Input</string>
+    <string name="settings_button_desc">Settings</string>
+    <string name="chat_button_desc">Chat History</string>
+    <string name="power_button_desc">Power Toggle</string>
+
+    <!-- Error Messages -->
+    <string name="error_no_internet">No internet connection available</string>
+    <string name="error_speech_recognition">Speech recognition error</string>
+    <string name="error_tts_failed">Text-to-speech initialization failed</string>
+    <string name="error_permission_audio">Audio permission required for voice commands</string>
+    <string name="error_permission_overlay">Overlay permission required for background operation</string>
+
+    <!-- Success Messages -->
+    <string name="success_audio_permission">Audio permission granted</string>
+    <string name="success_settings_saved">Settings saved successfully</string>
+    <string name="success_vox_activated">Vox is now online and ready to assist</string>
+    <string name="success_vox_deactivated">Vox is now offline</string>
+
+    <!-- Dialog Strings -->
+    <string name="dialog_settings_title">Vox Settings</string>
+    <string name="dialog_user_name_label">Your Name:</string>
+    <string name="dialog_user_name_hint">Enter your name</string>
+    <string name="dialog_user_name_description">Vox will use this name to personalize responses.</string>
+    <string name="dialog_save">Save</string>
+    <string name="dialog_cancel">Cancel</string>
+
+    <!-- Service Strings -->
+    <string name="service_notification_title">Vox AI</string>
+    <string name="service_notification_text">Voice assistant is running in background</string>
+    <string name="service_channel_name">Vox AI Service</string>
+    <string name="service_channel_description">Vox AI Background Service</string>
+
+    <!-- Command Responses -->
+    <string name="response_wake_acknowledged">Yes, I\'m listening. How can I help you?</string>
+    <string name="response_volume_increased">Volume increased</string>
+    <string name="response_volume_decreased">Volume decreased</string>
+    <string name="response_opening_app">Opening %s</string>
+    <string name="response_app_not_found">Sorry, I couldn\'t find or open %s</string>
+    <string name="response_opening_music">Opening music player</string>
+    <string name="response_opening_camera">Opening camera</string>
+    <string name="response_opening_dialer">Opening phone dialer</string>
+    <string name="response_current_time">The current time is %s</string>
+    <string name="response_current_date">Today is %s</string>
+    <string name="response_wifi_connected">You are connected to WiFi</string>
+    <string name="response_mobile_connected">You are connected to mobile data</string>
+    <string name="response_no_internet">No internet connection detected</string>
+    <string name="response_need_internet">Sorry, I need an internet connection to search for information</string>
+
+    <!-- Greeting Responses -->
+    <string name="greeting_hello">Hello! How can I assist you today?</string>
+    <string name="greeting_hi">Hi there! What can I do for you?</string>
+    <string name="greeting_good_morning">Good morning! Ready to start the day?</string>
+    <string name="greeting_good_afternoon">Good afternoon! How\'s your day going?</string>
+    <string name="greeting_good_evening">Good evening! How can I help you?</string>
+
+    <!-- Default Responses -->
+    <string name="default_response_1">I\'m not sure I understand that. Could you please rephrase?</string>
+    <string name="default_response_2">I didn\'t quite get that. Can you try saying it differently?</string>
+    <string name="default_response_3">I\'m still learning. Could you be more specific?</string>
+    <string name="default_response_4">Sorry, I don\'t understand that command yet.</string>
+
+    <!-- General Responses -->
+    <string name="response_how_are_you">I\'m functioning perfectly and ready to assist you!</string>
+    <string name="response_thank_you">You\'re welcome! Happy to help.</string>
+    <string name="response_goodbye">Goodbye! Have a great day!</string>
+
+    <!-- Feature Coming Soon -->
+    <string name="feature_coming_soon">This feature is coming soon!</string>
+    <string name="chat_history_coming_soon">Chat history feature coming soon</string>
+
+    <!-- Wake Words -->
+    <string-array name="wake_words">
+        <item>hey vox</item>
+        <item>hi vox</item>
+        <item>hello vox</item>
+        <item>vox</item>
+        <item>ok vox</item>
+        <item>wake up vox</item>
+        <item>vox wake up</item>
+    </string-array>
+</resources>

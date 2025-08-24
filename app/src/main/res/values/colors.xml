@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Vox AI Color Scheme -->
+    <color name="vox_cyan">#00E5FF</color>
+    <color name="vox_dark_cyan">#00B2CC</color>
+    <color name="vox_blue">#2196F3</color>
+    <color name="vox_dark_blue">#1976D2</color>
+    <color name="vox_purple">#9C27B0</color>
+    <color name="vox_dark_purple">#7B1FA2</color>
+
+    <!-- Status Colors -->
+    <color name="vox_green">#4CAF50</color>
+    <color name="vox_red">#F44336</color>
+    <color name="vox_orange">#FF9800</color>
+    <color name="vox_yellow">#FFC107</color>
+
+    <!-- Base Colors -->
+    <color name="vox_white">#FFFFFF</color>
+    <color name="vox_light_gray">#CCCCCC</color>
+    <color name="vox_gray">#888888</color>
+    <color name="vox_dark_gray">#444444</color>
+    <color name="vox_black">#000000</color>
+
+    <!-- Background Colors -->
+    <color name="vox_dark_bg">#0D1421</color>
+    <color name="vox_darker_bg">#081018</color>
+    <color name="vox_card_bg">#1A2332</color>
+    <color name="vox_surface">#243447</color>
+
+    <!-- Gradient Colors -->
+    <color name="vox_gradient_start">#0D1421</color>
+    <color name="vox_gradient_middle">#1A2332</color>
+    <color name="vox_gradient_end">#243447</color>
+
+    <!-- Transparency -->
+    <color name="vox_transparent">#00000000</color>
+    <color name="vox_semi_transparent">#80000000</color>
+    <color name="vox_light_transparent">#40000000</color>
+</resources>
