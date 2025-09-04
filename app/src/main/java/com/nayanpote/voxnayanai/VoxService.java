@@ -13,9 +13,7 @@ import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
-
 import androidx.core.app.NotificationCompat;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -77,7 +75,7 @@ public class VoxService extends Service implements TextToSpeech.OnInitListener {
         return new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Vox AI")
                 .setContentText("Voice assistant is running in background")
-                .setSmallIcon(R.drawable.ic_vox_notification)
+                .setSmallIcon(R.drawable.logo4)
                 .setContentIntent(pendingIntent)
                 .setOngoing(true)
                 .setSilent(true)

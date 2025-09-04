@@ -72,6 +72,29 @@
         <item name="android:fontFamily">@font/orbitron_regular</item>
     </style>
 
+    <!-- AI Dialog Theme -->
+    <style name="AIDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="colorPrimary">#00CED1</item>
+        <item name="colorAccent">#00FFFF</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColorSecondary">#B0B0B0</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.7</item>
+        <item name="dialogCornerRadius">16dp</item>
+        <item name="android:background">#1A1A2E</item>
+    </style>
+
+    <!-- styles.xml -->
+    <style name="EnhancedDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:background">@color/ai_background_medium</item>
+        <item name="android:textColor">@color/ai_text_primary</item>
+        <item name="android:textColorPrimary">@color/ai_text_primary</item>
+        <item name="colorAccent">@color/ai_primary_cyan</item>
+        <item name="colorPrimary">@color/ai_primary_cyan</item>
+    </style>
+
 </resources>
 
 

@@ -1,31 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Vox AI Color Scheme -->
-    <color name="vox_cyan">#00E5FF</color>
-    <color name="vox_dark_cyan">#00B2CC</color>
-    <color name="vox_blue">#2196F3</color>
-    <color name="vox_dark_blue">#1976D2</color>
+
+    <!-- ============ PRIMARY AI COLORS ============ -->
+    <color name="ai_primary_cyan_bright">#1AFFFF</color>
+    <color name="ai_primary_cyan_dark">#00CCCC</color>
+    <color name="ai_secondary_blue">#0080FF</color>
+    <color name="ai_secondary_blue_light">#40A0FF</color>
+    <color name="ai_secondary_blue_dark">#0060CC</color>
+    <color name="ai_tertiary_blue">#4040FF</color>
+    <color name="ai_accent_teal">#008B8B</color>
+    <color name="ai_accent_purple">#8A2BE2</color>
+
+    <!-- ============ STATUS COLORS ============ -->
+    <color name="ai_success_green">#00FF88</color>
+    <color name="ai_success_green_glow">#40FFA8</color>
+    <color name="ai_warning_orange">#FF8800</color>
+    <color name="ai_warning_amber">#FFAA00</color>
+    <color name="ai_error_red">#FF4444</color>
+    <color name="ai_error_red_bright">#FF6666</color>
+    <color name="ai_processing_purple">#8800FF</color>
+    <color name="ai_processing_purple_glow">#AA40FF</color>
+
+    <!-- ============ BACKGROUND COLORS ============ -->
+    <color name="ai_background_darker">#050508</color>
+    <color name="ai_background_medium">#151520</color>
+    <color name="ai_background_light">#1A1A2E</color>
+    <color name="ai_background_surface">#202040</color>
+    <color name="ai_background_elevated">#252545</color>
+
+    <!-- ============ TEXT COLORS ============ -->
+    <color name="ai_text_primary">#E0E0E0</color>
+    <color name="ai_text_secondary">#B0B0B0</color>
+    <color name="ai_text_tertiary">#808080</color>
+    <color name="ai_text_disabled">#505050</color>
+    <color name="ai_text_accent">#00FFFF</color>
+    <color name="ai_text_highlight">#FFFFFF</color>
+
+    <!-- ============ GLOW EFFECTS ============ -->
+    <color name="ai_glow_purple">#408800FF</color>
+    <color name="ai_glow_green">#4000FF88</color>
+    <color name="ai_glow_intense_cyan">#8000FFFF</color>
+    <color name="ai_glow_intense_blue">#800080FF</color>
+
+    <!-- ============ NEURAL NETWORK COLORS ============ -->
+    <color name="ai_neural_node">#00CCFF</color>
+    <color name="ai_neural_active">#00FFAA</color>
+
+
+    <!-- ============ PARTICLE COLORS ============ -->
+    <color name="ai_particle_white">#A0FFFFFF</color>
+
+    <!-- ============ HEXAGON RING COLORS ============ -->
+    <color name="ai_hex_outer">#4000FFFF</color>
+    <color name="ai_hex_middle">#400080FF</color>
+    <color name="ai_hex_inner">#404040FF</color>
+    <color name="ai_hex_core">#00FFFF</color>
+    <color name="ai_hex_stroke">#80FFFFFF</color>
+
+    <!-- ============ CIRCUIT COLORS ============ -->
+    <color name="ai_circuit_active">#00FF88</color>
+    <color name="ai_circuit_idle">#008844</color>
+    <color name="ai_circuit_trace">#00CCAA</color>
+    <color name="ai_circuit_node">#00FFCC</color>
+
+    <!-- ============ BUTTON COLORS ============ -->
+    <color name="ai_button_normal">#1A1A2E</color>
+    <color name="ai_button_pressed">#252545</color>
+    <color name="ai_button_disabled">#101015</color>
+    <color name="ai_button_accent">#00FFFF</color>
+    <color name="ai_button_success">#00FF88</color>
+    <color name="ai_button_danger">#FF4444</color>
+
+    <!-- ============ CARD COLORS ============ -->
+    <color name="ai_card_background">#151520</color>
+    <color name="ai_card_border">#404060</color>
+    <color name="ai_card_shadow">#20000000</color>
+    <color name="ai_card_glow">#2000FFFF</color>
+
+    <!-- ============ WAVE VISUALIZATION COLORS ============ -->
+    <color name="ai_wave_active">#00FFAA</color>
+    <color name="ai_wave_idle">#004422</color>
+    <color name="ai_wave_peak">#AAFFFF</color>
+    <color name="ai_wave_valley">#006666</color>
+
+    <!-- ============ HOLOGRAPHIC COLORS ============ -->
+    <color name="ai_holo_cyan">#E000FFFF</color>
+    <color name="ai_holo_blue">#E00080FF</color>
+    <color name="ai_holo_purple">#E08800FF</color>
+    <color name="ai_holo_rainbow_start">#FF0080</color>
+    <color name="ai_holo_rainbow_end">#8000FF</color>
+
+    <!-- ============ TRANSPARENCY LEVELS ============ -->
+    <color name="ai_transparent_10">#1A000000</color>
+    <color name="ai_transparent_20">#33000000</color>
+    <color name="ai_transparent_30">#4D000000</color>
+    <color name="ai_transparent_40">#66000000</color>
+    <color name="ai_transparent_50">#80000000</color>
+    <color name="ai_transparent_60">#99000000</color>
+    <color name="ai_transparent_70">#B3000000</color>
+    <color name="ai_transparent_80">#CC000000</color>
+    <color name="ai_transparent_90">#E6000000</color>
+
+    <!-- ============ GRADIENT STOP COLORS ============ -->
+    <color name="gradient_dark_start">#0A0A0F</color>
+    <color name="gradient_dark_middle">#151520</color>
+    <color name="gradient_dark_end">#1A1A2E</color>
+    <color name="gradient_glow_start">#4000FFFF</color>
+    <color name="gradient_glow_middle">#200080FF</color>
+    <color name="gradient_glow_end">#104040FF</color>
+
+    <!-- ============ VOICE INDICATOR COLORS ============ -->
+    <color name="ai_voice_listening">#00FF88</color>
+    <color name="ai_voice_processing">#FFAA00</color>
+    <color name="ai_voice_responding">#00AAFF</color>
+    <color name="ai_voice_error">#FF4444</color>
+
+    <!-- ============ NEURAL PULSE COLORS ============ -->
+    <color name="ai_pulse_start">#00FFFF</color>
+    <color name="ai_pulse_middle">#0080FF</color>
+    <color name="ai_pulse_end">#4040FF</color>
+    <color name="ai_pulse_glow">#8000FFFF</color>
+
+    <!-- ============ MATRIX EFFECT COLORS ============ -->
+    <color name="ai_matrix_green">#00FF41</color>
+    <color name="ai_matrix_cyan">#00FFFF</color>
+    <color name="ai_matrix_white">#FFFFFF</color>
+    <color name="ai_matrix_fade">#80008000</color>
+
+    <color name="vox_cyan">#00FFFF</color>
+    <color name="vox_dark_cyan">#00CCCC</color>
+    <color name="vox_blue">#0080FF</color>
+    <color name="vox_dark_blue">#0060CC</color>
+    <color name="vox_white">#FFFFFF</color>
+    <color name="vox_dark_bg">#0A0A0F</color>
+    <color name="vox_surface">#151520</color>
+    <color name="vox_gray">#808080</color>
+    <color name="vox_red">#FF4444</color>
+
+
+    <!-- Power Colors -->
+    <color name="ai_power_red">#E91E63</color>
+
+    <!-- Glow Effects -->
+    <color name="ai_glow_red">#40F44336</color>
+
+    <!-- Wave Colors -->
+    <color name="ai_wave_start">#00E5FF</color>
+    <color name="ai_wave_middle">#2196F3</color>
+    <color name="ai_wave_end">#3F51B5</color>
+    <color name="ai_wave_glow_start">#4000E5FF</color>
+    <color name="ai_wave_glow_end">#402196F3</color>
+    <color name="ai_wave_particle">#00E5FF</color>
+    <color name="ai_frequency_bar">#FF4081</color>
+
+
     <color name="vox_purple">#9C27B0</color>
     <color name="vox_dark_purple">#7B1FA2</color>
 
     <!-- Status Colors -->
     <color name="vox_green">#4CAF50</color>
-    <color name="vox_red">#F44336</color>
+
     <color name="vox_orange">#FF9800</color>
     <color name="vox_yellow">#FFC107</color>
 
     <!-- Base Colors -->
-    <color name="vox_white">#FFFFFF</color>
+
     <color name="vox_light_gray">#CCCCCC</color>
-    <color name="vox_gray">#888888</color>
+
     <color name="vox_dark_gray">#444444</color>
     <color name="vox_black">#000000</color>
 
-    <!-- Background Colors -->
-    <color name="vox_dark_bg">#0D1421</color>
     <color name="vox_darker_bg">#081018</color>
     <color name="vox_card_bg">#1A2332</color>
-    <color name="vox_surface">#243447</color>
 
     <!-- Gradient Colors -->
     <color name="vox_gradient_start">#0D1421</color>
@@ -36,4 +182,107 @@
     <color name="vox_transparent">#00000000</color>
     <color name="vox_semi_transparent">#80000000</color>
     <color name="vox_light_transparent">#40000000</color>
+
+    <!-- Vox Primary Colors -->
+    <color name="vox_primary">#2196F3</color>
+    <color name="vox_primary_dark">#1976D2</color>
+    <color name="vox_accent">#03DAC5</color>
+
+    <!-- Extended Background Colors -->
+    <color name="vox_background">#121212</color>
+    <color name="vox_surface_variant">#2A2A2A</color>
+
+    <!-- Text Colors -->
+    <color name="vox_text_primary">#FFFFFF</color>
+    <color name="vox_text_secondary">#B0B0B0</color>
+    <color name="vox_text_disabled">#757575</color>
+
+    <!-- AI Core Colors -->
+    <color name="vox_core_glow">#00BCD4</color>
+    <color name="vox_core_pulse">#E1F5FE</color>
+    <color name="vox_listening_wave">#4CAF50</color>
+
+    <!-- Additional Gradient Colors -->
+    <color name="gradient_start">#667eea</color>
+    <color name="gradient_end">#764ba2</color>
+
+    <!-- Transparent Colors -->
+    <color name="black_transparent">#80000000</color>
+    <color name="white_transparent">#80FFFFFF</color>
+
+    <!-- Material Design Colors -->
+    <color name="material_blue_600">#1E88E5</color>
+    <color name="material_blue_700">#1976D2</color>
+    <color name="material_teal_300">#4DB6AC</color>
+    <color name="material_teal_400">#26A69A</color>
+
+    <!--enhanced particles view-->
+    <color name="ai_particle_cyan">#FFFFFF</color>
+    <color name="ai_particle_energy">#80A1A2</color>
+    <color name="ai_particle_blue">#B5EBFF</color>
+    <color name="ai_particle_purple">#96BDC8</color>
+    <color name="ai_background">#000000</color>
+    <color name="ai_particle_bright_white">#F5F5F5</color>
+    <color name="ai_particle_neon_blue">#00FFFF</color>
+    <color name="ai_particle_electric_blue">#1E90FF</color>
+    <color name="ai_particle_icy_blue">#B0E0E6</color>
+    <color name="ai_neural_pulse">#99FFFFFF</color>
+
+<!--    neural color-->
+    <!-- Node Core Colors -->
+    <color name="ai_neural_input">#00BFFF</color>          <!-- Deep Sky Blue -->
+    <color name="ai_neural_processing">#1E90FF</color>     <!-- Dodger Blue -->
+    <color name="ai_neural_output">#FFFFFF</color>         <!-- Pure White (Stars) -->
+    <color name="ai_neural_memory">#87CEEB</color>         <!-- Sky Blue -->
+    <color name="ai_neural_core">#FFFFFF</color>           <!-- White Core -->
+
+    <!-- Primary Theme Colors -->
+    <color name="ai_primary_cyan">#00FFFF</color>          <!-- Bright Cyan -->
+    <color name="ai_primary_blue">#1E90FF</color>          <!-- Dodger Blue -->
+    <color name="ai_primary_white">#FFFFFF</color>         <!-- Pure White -->
+
+    <!-- Glow Effect Colors -->
+    <color name="ai_glow_cyan">#00FFFF</color>             <!-- Cyan Glow -->
+    <color name="ai_glow_blue">#1E90FF</color>             <!-- Blue Glow -->
+    <color name="ai_glow_white">#FFFFFF</color>            <!-- White Star Glow -->
+    <color name="ai_glow_light_blue">#87CEFA</color>       <!-- Light Sky Blue -->
+
+    <!-- Connection Colors -->
+    <color name="ai_neural_connection">#4169E1</color>     <!-- Royal Blue -->
+    <color name="ai_connection_input">#00BFFF</color>      <!-- Deep Sky Blue -->
+    <color name="ai_connection_output">#E6F3FF</color>     <!-- Very Light Blue -->
+    <color name="ai_connection_star">#E6F3FF</color>       <!-- Light Blue for Star Connections -->
+
+    <!-- Signal Flow Colors -->
+    <color name="ai_neural_signal">#00FFFF</color>         <!-- Bright Cyan Signal -->
+    <color name="ai_signal_flow">#00FFFF</color>           <!-- Cyan Flow -->
+
+    <!-- Background and Support Colors -->
+    <color name="ai_background_dark">#000011</color>       <!-- Very Dark Blue -->
+    <color name="ai_background_space">#000033</color>      <!-- Space Dark Blue -->
+    <color name="ai_accent_neon">#00FFFF</color>           <!-- Neon Cyan Accent -->
+
+    <!-- Transparency Variants (for gradual fading effects) -->
+    <color name="ai_blue_alpha_80">#CC1E90FF</color>       <!-- 80% Blue -->
+    <color name="ai_blue_alpha_60">#991E90FF</color>       <!-- 60% Blue -->
+    <color name="ai_blue_alpha_40">#661E90FF</color>       <!-- 40% Blue -->
+    <color name="ai_blue_alpha_20">#331E90FF</color>       <!-- 20% Blue -->
+
+    <color name="ai_cyan_alpha_80">#CC00FFFF</color>       <!-- 80% Cyan -->
+    <color name="ai_cyan_alpha_60">#9900FFFF</color>       <!-- 60% Cyan -->
+    <color name="ai_cyan_alpha_40">#6600FFFF</color>       <!-- 40% Cyan -->
+    <color name="ai_cyan_alpha_20">#3300FFFF</color>       <!-- 20% Cyan -->
+
+    <color name="ai_white_alpha_80">#CCFFFFFF</color>      <!-- 80% White -->
+    <color name="ai_white_alpha_60">#99FFFFFF</color>      <!-- 60% White -->
+    <color name="ai_white_alpha_40">#66FFFFFF</color>      <!-- 40% White -->
+    <color name="ai_white_alpha_20">#33FFFFFF</color>      <!-- 20% White -->
+
+    <color name="ai_primary_blue_dark">#1976D2</color>
+    <color name="ai_secondary_orange">#FF9800</color>
+    <color name="ai_secondary_orange_dark">#F57C00</color>
+    <color name="ai_accent_red">#F44336</color>
+    <color name="ai_accent_red_dark">#D32F2F</color>
+    <color name="ai_success_green_dark">#2E7D32</color>
+    <color name="ai_surface">#FFFFFF</color>
 </resources>

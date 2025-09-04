@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="220dp"
+    android:height="220dp"
+    android:viewportWidth="220"
+    android:viewportHeight="220">
+
+    <!-- Main circuit ring -->
+    <path
+        android:pathData="M110,30 C160,30 190,60 190,110 C190,160 160,190 110,190 C60,190 30,160 30,110 C30,60 60,30 110,30"
+        android:strokeColor="@color/ai_circuit_active"
+        android:strokeWidth="2"
+        android:fillColor="@color/ai_transparent_20" />
+
+    <!-- Circuit traces -->
+    <path
+        android:pathData="M110,30 L110,10 M190,110 L210,110 M110,190 L110,210 M30,110 L10,110"
+        android:strokeColor="@color/ai_circuit_trace"
+        android:strokeWidth="3" />
+
+    <!-- Circuit nodes (converted circles as pathData) -->
+<!--    <path-->
+<!--        android:fillColor="@color/ai_circuit_node"-->
+<!--        android:pathData="M110,24 A6,6 0 1,1 109.999,24" />-->
+<!--    <path-->
+<!--        android:fillColor="@color/ai_circuit_node"-->
+<!--        android:pathData="M196,110 A6,6 0 1,1 195.999,110" />-->
+<!--    <path-->
+<!--        android:fillColor="@color/ai_circuit_node"-->
+<!--        android:pathData="M110,196 A6,6 0 1,1 109.999,196" />-->
+<!--    <path-->
+<!--        android:fillColor="@color/ai_circuit_node"-->
+<!--        android:pathData="M36,110 A6,6 0 1,1 35.999,110" />-->
+
+    <!-- Inner circuit details -->
+<!--    <path-->
+<!--        android:pathData="M70,70 L150,70 L150,150 L70,150 Z"-->
+<!--        android:strokeColor="@color/ai_secondary_blue"-->
+<!--        android:strokeWidth="1"-->
+<!--        android:fillColor="@color/ai_transparent_10" />-->
+</vector>

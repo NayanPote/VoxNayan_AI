@@ -1,15 +1,17 @@
 package com.nayanpote.voxnayanai;
 
 import android.Manifest;
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.ImageDecoder;
+import android.graphics.drawable.AnimatedImageDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,18 +23,20 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -42,10 +46,16 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     private static final int REQUEST_OVERLAY_PERMISSION = 1002;
 
     // UI Components
-    private TextView tvResponse, tvStatus;
-    private ImageButton btnVoice, btnSettings, btnChat, btnPower;
+    private TextView tvResponse, tvStatus, tvNetworkStatus, tvWakeWordStatus;
+    private ImageButton btnVoice, btnSettings, btnlens, btnPower;
+    private CardView listeningCard, statusBarCard, responseCard;
     private LinearLayout listeningIndicator;
-    private View statusIndicator, outerRing, middleRing, pulseEffect;
+    private View statusIndicator, backgroundGlow, pulseEffect, voiceButtonGlow;
+    private ImageView ivVoxCore;
+
+    // Custom Views
+    private NeuralNetworkView neuralNetwork;
+    private EnhancedWaveView waveVisualization;
 
     // Core Components
     private TextToSpeech textToSpeech;
@@ -54,15 +64,18 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     private VoxAIProcessor aiProcessor;
     private SharedPreferences preferences;
 
+    // Animation Components
+    private EnhancedAnimationManager animationManager;
+
     // State Variables
     private boolean isListening = false;
     private boolean isTTSInitialized = false;
     private boolean isVoxActive = true;
+    private boolean isNetworkConnected = false;
     private String userName = "User";
 
-    // Animation Components
-    private AnimatorSet pulseAnimation;
-    private AnimatorSet listeningAnimation;
+    // Network Monitor
+    private BroadcastReceiver networkReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,42 +83,127 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         setContentView(R.layout.activity_main);
 
         initializeViews();
+        initializeCustomViews();
         initializePreferences();
+        initializeNetworkMonitor();
         initializeTextToSpeech();
         initializeSpeechRecognizer();
         initializeAIProcessor();
-        initializeAnimations();
+        initializeAnimationManager();
         setupClickListeners();
 
         checkPermissions();
+        checkNetworkStatus();
         startVoxService();
+        startEntranceAnimations();
 
         // Welcome message
         Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(() -> {
-            String welcomeMessage = "Hello " + userName + ", I am Vox. Your AI assistant is ready to help.";
+            String welcomeMessage = "Hello " + userName + ",  Neural networks initialized and ready to assist.";
             updateResponse(welcomeMessage);
             speakText(welcomeMessage);
-        }, 1000);
+            animationManager.startIdleAnimations();
+        }, 2000);
+
+        setupAnimatedLogo();
     }
 
     private void initializeViews() {
+        // Text Views
         tvResponse = findViewById(R.id.tvResponse);
         tvStatus = findViewById(R.id.tvStatus);
+        tvNetworkStatus = findViewById(R.id.tvNetworkStatus);
+        tvWakeWordStatus = findViewById(R.id.tvWakeWordStatus);
+
+        // Buttons
         btnVoice = findViewById(R.id.btnVoice);
         btnSettings = findViewById(R.id.btnSettings);
-        btnChat = findViewById(R.id.btnChat);
         btnPower = findViewById(R.id.btnPower);
+        btnlens = findViewById(R.id.btnlens);
+
+        // Cards and Containers
+        listeningCard = findViewById(R.id.listeningCard);
+        statusBarCard = findViewById(R.id.statusBarCard);
+        responseCard = findViewById(R.id.responseCard);
         listeningIndicator = findViewById(R.id.listeningIndicator);
+
+        // Visual Effects
         statusIndicator = findViewById(R.id.statusIndicator);
-        outerRing = findViewById(R.id.outerRing);
-        middleRing = findViewById(R.id.middleRing);
+        backgroundGlow = findViewById(R.id.backgroundGlow);
         pulseEffect = findViewById(R.id.pulseEffect);
+        voiceButtonGlow = findViewById(R.id.voiceButtonGlow);
+
+        ivVoxCore = findViewById(R.id.ivVoxCore);
+
+    }
+
+    private void initializeCustomViews() {
+        neuralNetwork = findViewById(R.id.neuralNetwork);
+        waveVisualization = findViewById(R.id.waveVisualization);
+
+        // Initialize neural network
+        if (neuralNetwork != null) {
+            neuralNetwork.startNeuralAnimation();
+        }
     }
 
     private void initializePreferences() {
         preferences = getSharedPreferences("VoxPreferences", Context.MODE_PRIVATE);
         userName = preferences.getString("user_name", "User");
+    }
+
+    private void initializeNetworkMonitor() {
+        networkReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                checkNetworkStatus();
+            }
+        };
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkReceiver, filter);
+    }
+
+    private void checkNetworkStatus() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean wasConnected = isNetworkConnected;
+        isNetworkConnected = activeNetwork != null && activeNetwork.isConnected();
+
+        updateNetworkStatusUI();
+
+        // Notify user about network status change
+        if (wasConnected && !isNetworkConnected) {
+            updateResponse("Network disconnected. Switching to offline mode with limited functionality.");
+            speakText("Network disconnected. Operating in offline mode.");
+            animationManager.playNetworkErrorAnimation();
+        } else if (!wasConnected && isNetworkConnected) {
+            updateResponse("Network connected. Full neural network functionality restored.");
+            speakText("Network connected. All systems operational.");
+            animationManager.playNetworkConnectedAnimation();
+        }
+    }
+
+    private void updateNetworkStatusUI() {
+        if (tvNetworkStatus != null) {
+            if (isNetworkConnected) {
+                tvNetworkStatus.setText("ONLINE");
+                tvNetworkStatus.setTextColor(getResources().getColor(R.color.ai_success_green));
+                animationManager.animateStatusIndicator(tvNetworkStatus, true);
+            } else {
+                tvNetworkStatus.setText("OFFLINE");
+                tvNetworkStatus.setTextColor(getResources().getColor(R.color.ai_error_red));
+                animationManager.animateStatusIndicator(tvNetworkStatus, false);
+
+                // Stop listening when going offline
+                if (isListening) {
+                    stopListening();
+                    updateResponse("Network connection lost. Voice recognition paused.");
+                }
+            }
+        }
     }
 
     private void initializeTextToSpeech() {
@@ -124,14 +222,20 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             @Override
             public void onReadyForSpeech(Bundle params) {
                 showListening(true);
+                animationManager.startListeningMode();
             }
 
             @Override
-            public void onBeginningOfSpeech() {}
+            public void onBeginningOfSpeech() {
+                animationManager.onSpeechDetected();
+            }
 
             @Override
             public void onRmsChanged(float rmsdB) {
-                animateListeningWaves(rmsdB);
+                if (waveVisualization != null) {
+                    waveVisualization.updateAmplitude(rmsdB);
+                }
+                animationManager.updateVoiceLevel(rmsdB);
             }
 
             @Override
@@ -140,12 +244,14 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             @Override
             public void onEndOfSpeech() {
                 showListening(false);
+                animationManager.stopListeningMode();
             }
 
             @Override
             public void onError(int error) {
                 showListening(false);
                 isListening = false;
+                animationManager.playErrorAnimation();
                 handleSpeechError(error);
             }
 
@@ -153,9 +259,11 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             public void onResults(Bundle results) {
                 showListening(false);
                 isListening = false;
+                animationManager.stopListeningMode();
                 ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 if (matches != null && !matches.isEmpty()) {
                     String spokenText = matches.get(0);
+                    animationManager.playProcessingAnimation();
                     processVoiceCommand(spokenText);
                 }
             }
@@ -164,7 +272,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             public void onPartialResults(Bundle partialResults) {
                 ArrayList<String> partialMatches = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 if (partialMatches != null && !partialMatches.isEmpty()) {
-                    updateResponse("You said: " + partialMatches.get(0));
+                    updateResponse("Processing: " + partialMatches.get(0));
+                    animationManager.updateProcessingText();
                 }
             }
 
@@ -177,54 +286,37 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         aiProcessor = new VoxAIProcessor(this);
     }
 
-    private void initializeAnimations() {
-        // Pulse animation for AI core
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(pulseEffect, "scaleX", 0.8f, 1.2f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(pulseEffect, "scaleY", 0.8f, 1.2f);
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(pulseEffect, "alpha", 0.3f, 0.8f);
-
-        // Add repeat + reverse on each animator
-        scaleX.setRepeatMode(ValueAnimator.REVERSE);
-        scaleX.setRepeatCount(ValueAnimator.INFINITE);
-
-        scaleY.setRepeatMode(ValueAnimator.REVERSE);
-        scaleY.setRepeatCount(ValueAnimator.INFINITE);
-
-        alpha.setRepeatMode(ValueAnimator.REVERSE);
-        alpha.setRepeatCount(ValueAnimator.INFINITE);
-
-        // AnimatorSet just groups them
-        pulseAnimation = new AnimatorSet();
-        pulseAnimation.playTogether(scaleX, scaleY, alpha);
-        pulseAnimation.setDuration(1000);
-        pulseAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
-        pulseAnimation.start();
-
-        // Outer ring rotation
-        ObjectAnimator rotateOuter = ObjectAnimator.ofFloat(outerRing, "rotation", 0f, 360f);
-        rotateOuter.setDuration(10000);
-        rotateOuter.setRepeatCount(ValueAnimator.INFINITE);
-        rotateOuter.start();
-
-        // Middle ring rotation (opposite direction)
-        ObjectAnimator rotateMiddle = ObjectAnimator.ofFloat(middleRing, "rotation", 360f, 0f);
-        rotateMiddle.setDuration(8000);
-        rotateMiddle.setRepeatCount(ValueAnimator.INFINITE);
-        rotateMiddle.start();
+    private void initializeAnimationManager() {
+        animationManager = new EnhancedAnimationManager(this);
+        animationManager.initializeViews(
+               ivVoxCore,
+                backgroundGlow, pulseEffect, voiceButtonGlow, statusIndicator,
+                statusBarCard, responseCard, listeningCard
+        );
     }
 
-
     private void setupClickListeners() {
-        btnVoice.setOnClickListener(v -> toggleListening());
-
-        btnSettings.setOnClickListener(v -> showSettingsDialog());
-
-        btnChat.setOnClickListener(v -> {
-            // TODO: Implement chat history
-            Toast.makeText(this, "Chat history feature coming soon", Toast.LENGTH_SHORT).show();
+        btnVoice.setOnClickListener(v -> {
+            animationManager.playButtonClickAnimation(v);
+            toggleListening();
         });
 
-        btnPower.setOnClickListener(v -> toggleVoxPower());
+        btnSettings.setOnClickListener(v -> {
+            animationManager.playButtonClickAnimation(v);
+            showSettingsDialog();
+        });
+
+        btnlens.setOnClickListener(v -> {
+            Intent intent = new Intent(this, nayanlens.class);
+            startActivity(intent);
+
+            animationManager.playButtonClickAnimation(v);
+        });
+
+        btnPower.setOnClickListener(v -> {
+            animationManager.playButtonClickAnimation(v);
+            toggleVoxPower();
+        });
     }
 
     private void checkPermissions() {
@@ -245,6 +337,9 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     private void startVoxService() {
         Intent serviceIntent = new Intent(this, VoxService.class);
+        serviceIntent.putExtra("user_name", userName);
+        serviceIntent.putExtra("is_active", isVoxActive);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(serviceIntent);
         } else {
@@ -252,9 +347,35 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         }
     }
 
+    private void startEntranceAnimations() {
+        animationManager.playEntranceAnimation();
+    }
+
+    private void setupAnimatedLogo() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            try {
+                ImageDecoder.Source source = ImageDecoder.createSource(getResources(), R.drawable.animated_logo);
+                AnimatedImageDrawable gifDrawable = (AnimatedImageDrawable) ImageDecoder.decodeDrawable(source);
+                ivVoxCore.setImageDrawable(gifDrawable);
+                gifDrawable.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void toggleListening() {
         if (!isVoxActive) {
-            updateResponse("Vox is currently offline. Please activate Vox first.");
+            updateResponse("Vox neural network is offline. Please activate the system first.");
+            speakText("Neural network is offline. Please activate me first.");
+            animationManager.playWarningAnimation();
+            return;
+        }
+
+        if (!isNetworkConnected) {
+            updateResponse("No network connection detected. Voice recognition requires internet connectivity.");
+            speakText("Network connection required for voice recognition.");
+            animationManager.playNetworkErrorAnimation();
             return;
         }
 
@@ -270,9 +391,11 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 == PackageManager.PERMISSION_GRANTED) {
             isListening = true;
             speechRecognizer.startListening(speechRecognizerIntent);
-            animatePulse(true);
+            animationManager.startVoiceInputMode();
+            updateResponse("Neural network listening...");
         } else {
-            Toast.makeText(this, "Audio permission required", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Audio permission required for voice input", Toast.LENGTH_SHORT).show();
+            animationManager.playErrorAnimation();
         }
     }
 
@@ -280,78 +403,35 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         isListening = false;
         speechRecognizer.stopListening();
         showListening(false);
-        animatePulse(false);
+        animationManager.stopVoiceInputMode();
+        updateResponse("Voice input terminated.");
     }
 
     private void showListening(boolean listening) {
-        listeningIndicator.setVisibility(listening ? View.VISIBLE : View.GONE);
+        listeningCard.setVisibility(listening ? View.VISIBLE : View.GONE);
         if (listening) {
-            startListeningAnimation();
+            animationManager.showListeningIndicator();
+            if (waveVisualization != null) {
+                waveVisualization.startListening();
+            }
         } else {
-            stopListeningAnimation();
-        }
-    }
-
-    private void startListeningAnimation() {
-        if (listeningAnimation != null && listeningAnimation.isRunning()) {
-            return;
-        }
-
-        View[] waves = {
-                findViewById(R.id.wave1),
-                findViewById(R.id.wave2),
-                findViewById(R.id.wave3),
-                findViewById(R.id.wave4),
-                findViewById(R.id.wave5)
-        };
-
-        listeningAnimation = new AnimatorSet();
-        ArrayList<Animator> animators = new ArrayList<>(); // Use Animator, not ObjectAnimator
-
-        for (int i = 0; i < waves.length; i++) {
-            ObjectAnimator scaleY = ObjectAnimator.ofFloat(waves[i], "scaleY", 0.5f, 2.0f);
-            scaleY.setDuration(600);
-            scaleY.setRepeatCount(ValueAnimator.INFINITE);
-            scaleY.setRepeatMode(ValueAnimator.REVERSE);
-            scaleY.setStartDelay(i * 100); // offset each wave
-            animators.add(scaleY);
-        }
-
-        listeningAnimation.playTogether(animators);
-        listeningAnimation.start();
-    }
-
-
-    private void stopListeningAnimation() {
-        if (listeningAnimation != null) {
-            listeningAnimation.cancel();
-        }
-    }
-
-    private void animateListeningWaves(float rmsdB) {
-        // Animate waves based on audio level
-        float normalizedLevel = Math.min(rmsdB / 10.0f, 1.0f);
-        // Implementation for wave animation based on audio level
-    }
-
-    private void animatePulse(boolean start) {
-        if (start) {
-            pulseEffect.setVisibility(View.VISIBLE);
-            pulseAnimation.start();
-        } else {
-            pulseAnimation.cancel();
-            pulseEffect.setVisibility(View.INVISIBLE);
+            animationManager.hideListeningIndicator();
+            if (waveVisualization != null) {
+                waveVisualization.stopListening();
+            }
         }
     }
 
     private void processVoiceCommand(String command) {
-        updateResponse("Processing: " + command);
+        updateResponse("Neural processing: " + command);
+        animationManager.playThinkingAnimation();
 
         // Check for wake words
         if (aiProcessor.isWakeWord(command)) {
-            String response = "Yes " + userName + ", I'm listening. How can I help you?";
+            String response = "Yes " + userName + ", neural networks are active. How may I assist you?";
             updateResponse(response);
             speakText(response);
+            animationManager.playResponseAnimation();
             return;
         }
 
@@ -362,14 +442,16 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 runOnUiThread(() -> {
                     updateResponse(response);
                     speakText(response);
+                    animationManager.playResponseAnimation();
                 });
             }
 
             @Override
             public void onError(String error) {
                 runOnUiThread(() -> {
-                    updateResponse("Sorry, I encountered an error: " + error);
-                    speakText("Sorry, I encountered an error while processing your request.");
+                    updateResponse("Neural processing error: " + error);
+                    speakText("I encountered an error while processing your request.");
+                    animationManager.playErrorAnimation();
                 });
             }
         });
@@ -377,11 +459,13 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     private void updateResponse(String response) {
         tvResponse.setText(response);
+        animationManager.animateResponseText();
     }
 
     private void speakText(String text) {
         if (isTTSInitialized && textToSpeech != null) {
             textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+            animationManager.playSpeakingAnimation();
         }
     }
 
@@ -389,80 +473,100 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         String errorMessage;
         switch (errorCode) {
             case SpeechRecognizer.ERROR_AUDIO:
-                errorMessage = "Audio recording error";
+                errorMessage = "Audio recording error detected";
                 break;
             case SpeechRecognizer.ERROR_CLIENT:
-                errorMessage = "Client side error";
+                errorMessage = "Client side error occurred";
                 break;
             case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
-                errorMessage = "Insufficient permissions";
+                errorMessage = "Insufficient permissions for audio";
                 break;
             case SpeechRecognizer.ERROR_NETWORK:
-                errorMessage = "Network error";
+                errorMessage = "Network connectivity error";
                 break;
             case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
-                errorMessage = "Network timeout";
+                errorMessage = "Network timeout occurred";
                 break;
             case SpeechRecognizer.ERROR_NO_MATCH:
-                errorMessage = "No speech input matched";
+                errorMessage = "No speech pattern matched";
                 break;
             case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
                 errorMessage = "Recognition service busy";
                 break;
             case SpeechRecognizer.ERROR_SERVER:
-                errorMessage = "Server error";
+                errorMessage = "Server error encountered";
                 break;
             case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
-                errorMessage = "No speech input";
+                errorMessage = "No speech input detected";
                 break;
             default:
-                errorMessage = "Speech recognition error";
+                errorMessage = "Unknown speech recognition error";
                 break;
         }
 
         updateResponse("Speech Error: " + errorMessage);
+        speakText("I encountered a speech recognition error. Please try again.");
     }
 
     private void showSettingsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Vox Settings");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.EnhancedDialogTheme);
+        builder.setTitle("Vox AI Neural Settings");
 
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_settings, null);
         EditText etUserName = dialogView.findViewById(R.id.etUserName);
         etUserName.setText(userName);
 
         builder.setView(dialogView);
-        builder.setPositiveButton("Save", (dialog, which) -> {
+        builder.setPositiveButton("Save Configuration", (dialog, which) -> {
             String newName = etUserName.getText().toString().trim();
             if (!newName.isEmpty()) {
                 userName = newName;
                 preferences.edit().putString("user_name", userName).apply();
-                updateResponse("Settings saved. Hello " + userName + "!");
-                speakText("Settings saved. Hello " + userName);
+                updateResponse("Neural configuration updated. Hello " + userName + "!");
+                speakText("Configuration saved. Hello " + userName);
+                animationManager.playSuccessAnimation();
+
+                // Update service with new user name
+                Intent serviceIntent = new Intent(this, VoxService.class);
+                serviceIntent.putExtra("user_name", userName);
+                serviceIntent.putExtra("is_active", isVoxActive);
+                startService(serviceIntent);
             }
         });
         builder.setNegativeButton("Cancel", null);
 
-        builder.create().show();
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        animationManager.animateDialog(dialog);
     }
+
 
     private void toggleVoxPower() {
         isVoxActive = !isVoxActive;
+        animationManager.playPowerToggleAnimation(isVoxActive);
 
         if (isVoxActive) {
-            statusIndicator.setBackgroundResource(R.drawable.status_indicator_active);
+            statusIndicator.setBackgroundResource(R.drawable.enhanced_status_active);
             tvStatus.setText("ACTIVE");
-            tvStatus.setTextColor(getResources().getColor(R.color.vox_green));
-            updateResponse("Vox is now online and ready to assist.");
-            speakText("Vox is now online and ready to assist " + userName);
+            tvStatus.setTextColor(getResources().getColor(R.color.ai_success_green));
+            updateResponse("Vox AI neural network is now online and fully operational.");
+            speakText("Neural network activated. All systems operational, " + userName);
+            animationManager.playActivationAnimation();
         } else {
-            statusIndicator.setBackgroundResource(R.drawable.status_indicator_inactive);
-            tvStatus.setText("OFFLINE");
-            tvStatus.setTextColor(getResources().getColor(R.color.vox_red));
-            updateResponse("Vox is now offline.");
-            speakText("Vox is going offline. Goodbye " + userName);
+            statusIndicator.setBackgroundResource(R.drawable.enhanced_status_inactive);
+            tvStatus.setText("STANDBY");
+            tvStatus.setTextColor(getResources().getColor(R.color.ai_error_red));
+            updateResponse("Vox AI neural network entering standby mode.");
+            speakText("Neural network entering standby mode. Goodbye " + userName);
             stopListening();
+            animationManager.playDeactivationAnimation();
         }
+
+        // Update service status
+        Intent serviceIntent = new Intent(this, VoxService.class);
+        serviceIntent.putExtra("user_name", userName);
+        serviceIntent.putExtra("is_active", isVoxActive);
+        startService(serviceIntent);
     }
 
     @Override
@@ -473,12 +577,13 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 Toast.makeText(this, "Text-to-Speech language not supported", Toast.LENGTH_SHORT).show();
             } else {
                 isTTSInitialized = true;
-                // Set voice parameters for a more AI-like sound
                 textToSpeech.setSpeechRate(0.9f);
                 textToSpeech.setPitch(1.0f);
+                animationManager.playTTSInitializedAnimation();
             }
         } else {
             Toast.makeText(this, "Text-to-Speech initialization failed", Toast.LENGTH_SHORT).show();
+            animationManager.playErrorAnimation();
         }
     }
 
@@ -488,8 +593,10 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         if (requestCode == REQUEST_RECORD_AUDIO) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Audio permission granted", Toast.LENGTH_SHORT).show();
+                animationManager.playSuccessAnimation();
             } else {
-                Toast.makeText(this, "Audio permission is required for voice commands", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Audio permission required for voice commands", Toast.LENGTH_LONG).show();
+                animationManager.playWarningAnimation();
             }
         }
     }
@@ -497,18 +604,30 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        if (networkReceiver != null) {
+            try {
+                unregisterReceiver(networkReceiver);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         if (textToSpeech != null) {
             textToSpeech.stop();
             textToSpeech.shutdown();
         }
+
         if (speechRecognizer != null) {
             speechRecognizer.destroy();
         }
-        if (pulseAnimation != null) {
-            pulseAnimation.cancel();
+
+        if (animationManager != null) {
+            animationManager.cleanup();
         }
-        if (listeningAnimation != null) {
-            listeningAnimation.cancel();
+
+        if (neuralNetwork != null) {
+            neuralNetwork.stopNeuralAnimation();
         }
     }
 
@@ -517,6 +636,18 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         super.onPause();
         if (isListening) {
             stopListening();
+        }
+        if (animationManager != null) {
+            animationManager.pauseAnimations();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkNetworkStatus();
+        if (animationManager != null) {
+            animationManager.resumeAnimations();
         }
     }
 }

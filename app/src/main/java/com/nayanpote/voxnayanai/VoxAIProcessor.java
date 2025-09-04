@@ -83,6 +83,11 @@ public class VoxAIProcessor {
             return;
         }
 
+        // Handle new API features
+        if (handleNewAPIFeatures(lowerCommand, callback)) {
+            return;
+        }
+
         // Handle general conversation
         handleGeneralConversation(lowerCommand, callback);
     }
@@ -197,6 +202,18 @@ public class VoxAIProcessor {
                             searchWikipediaInfo(query, callback);
                         }
                     });
+                } else if (isDefinitionQuery(query)) {
+                    NetworkHelper.getDefinition(query, new NetworkHelper.NetworkCallback() {
+                        @Override
+                        public void onSuccess(String result) {
+                            callback.onResponse(result);
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            searchWikipediaInfo(query, callback);
+                        }
+                    });
                 } else {
                     searchWikipediaInfo(query, callback);
                 }
@@ -209,8 +226,18 @@ public class VoxAIProcessor {
             return true;
         }
 
-        if (command.contains("news") || command.contains("latest news")) {
-            callback.onResponse("For the latest news, I can open your news app. Would you like me to do that?");
+        if (command.contains("news") || command.contains("latest news") || command.contains("tech news")) {
+            NetworkHelper.getHackerNewsStories(new NetworkHelper.NetworkCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    callback.onResponse(result);
+                }
+
+                @Override
+                public void onError(String error) {
+                    callback.onResponse("For the latest news, I can open your news app. Would you like me to do that?");
+                }
+            });
             return true;
         }
 
@@ -254,6 +281,21 @@ public class VoxAIProcessor {
             return true;
         }
 
+        if (command.contains("dog fact") || command.contains("tell me about dogs")) {
+            NetworkHelper.getDogFact(new NetworkHelper.NetworkCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    callback.onResponse(result);
+                }
+
+                @Override
+                public void onError(String error) {
+                    callback.onResponse("Here's a dog fact: Dogs have an exceptional sense of smell with over 300 million olfactory receptors.");
+                }
+            });
+            return true;
+        }
+
         if (command.contains("number") && (command.contains("fact") || command.contains("trivia"))) {
             String number = extractNumber(command);
             if (number != null) {
@@ -272,6 +314,102 @@ public class VoxAIProcessor {
             }
         }
 
+        if (command.contains("quote") || command.contains("inspire me") || command.contains("motivation")) {
+            NetworkHelper.getRandomQuote(new NetworkHelper.NetworkCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    callback.onResponse(result);
+                }
+
+                @Override
+                public void onError(String error) {
+                    String[] quotes = {
+                            "\"The only way to do great work is to love what you do.\" - Steve Jobs",
+                            "\"Innovation distinguishes between a leader and a follower.\" - Steve Jobs",
+                            "\"The future belongs to those who believe in the beauty of their dreams.\" - Eleanor Roosevelt"
+                    };
+                    Random random = new Random();
+                    callback.onResponse(quotes[random.nextInt(quotes.length)]);
+                }
+            });
+            return true;
+        }
+
+        if (command.contains("programming quote") || command.contains("coding quote")) {
+            NetworkHelper.getProgrammingQuote(new NetworkHelper.NetworkCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    callback.onResponse(result);
+                }
+
+                @Override
+                public void onError(String error) {
+                    callback.onResponse("\"Programs must be written for people to read, and only incidentally for machines to execute.\" - Harold Abelson");
+                }
+            });
+            return true;
+        }
+
+        if (command.contains("trivia") || command.contains("quiz") || command.contains("question")) {
+            NetworkHelper.getTriviaQuestion(new NetworkHelper.NetworkCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    callback.onResponse(result);
+                }
+
+                @Override
+                public void onError(String error) {
+                    callback.onResponse("Here's a trivia question: What is the largest planet in our solar system? Answer: Jupiter");
+                }
+            });
+            return true;
+        }
+
+        if (command.contains("advice") || command.contains("suggestion")) {
+            NetworkHelper.getAdvice(new NetworkHelper.NetworkCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    callback.onResponse(result);
+                }
+
+                @Override
+                public void onError(String error) {
+                    callback.onResponse("Here's some advice: Always believe in yourself and keep moving forward, no matter the obstacles.");
+                }
+            });
+            return true;
+        }
+
+        if (command.contains("riddle") || command.contains("puzzle")) {
+            NetworkHelper.getRiddle(new NetworkHelper.NetworkCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    callback.onResponse(result);
+                }
+
+                @Override
+                public void onError(String error) {
+                    callback.onResponse("Here's a riddle: I speak without a mouth and hear without ears. What am I? Answer: An echo");
+                }
+            });
+            return true;
+        }
+
+        if (command.contains("activity") || command.contains("bored") || command.contains("what to do")) {
+            NetworkHelper.getRandomActivity(new NetworkHelper.NetworkCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    callback.onResponse(result);
+                }
+
+                @Override
+                public void onError(String error) {
+                    callback.onResponse("Activity suggestion: Try reading a book or going for a walk to refresh your mind.");
+                }
+            });
+            return true;
+        }
+
         if (command.contains("roll dice") || command.contains("dice roll") || command.contains("random number")) {
             Random random = new Random();
             int dice = random.nextInt(6) + 1;
@@ -283,6 +421,94 @@ public class VoxAIProcessor {
             Random random = new Random();
             String result = random.nextBoolean() ? "Heads" : "Tails";
             callback.onResponse("The coin landed on " + result + "!");
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean handleNewAPIFeatures(String command, AIResponseCallback callback) {
+        if (command.contains("crypto") || command.contains("bitcoin") || command.contains("cryptocurrency")) {
+            NetworkHelper.getCryptoRates(new NetworkHelper.NetworkCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    callback.onResponse(result);
+                }
+
+                @Override
+                public void onError(String error) {
+                    callback.onResponse("I couldn't fetch crypto rates right now. Try checking a crypto app.");
+                }
+            });
+            return true;
+        }
+
+        if (command.contains("name") && (command.contains("analyze") || command.contains("predict") || command.contains("tell me about my name"))) {
+            String name = extractNameFromCommand(command);
+            if (!TextUtils.isEmpty(name)) {
+                NetworkHelper.getNameInfo(name, new NetworkHelper.NetworkCallback() {
+                    @Override
+                    public void onSuccess(String result) {
+                        callback.onResponse(result);
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        callback.onResponse("I couldn't analyze that name right now.");
+                    }
+                });
+                return true;
+            }
+        }
+
+        if (command.contains("university") || command.contains("college") || command.contains("search university")) {
+            String query = extractUniversityQuery(command);
+            if (!TextUtils.isEmpty(query)) {
+                NetworkHelper.searchUniversities(query, new NetworkHelper.NetworkCallback() {
+                    @Override
+                    public void onSuccess(String result) {
+                        callback.onResponse(result);
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        callback.onResponse("I couldn't search universities right now.");
+                    }
+                });
+                return true;
+            }
+        }
+
+        if (command.contains("github") || command.contains("git hub")) {
+            String username = extractGitHubUsername(command);
+            if (!TextUtils.isEmpty(username)) {
+                NetworkHelper.getGitHubUserInfo(username, new NetworkHelper.NetworkCallback() {
+                    @Override
+                    public void onSuccess(String result) {
+                        callback.onResponse(result);
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        callback.onResponse("I couldn't fetch GitHub user information right now.");
+                    }
+                });
+                return true;
+            }
+        }
+
+        if (command.contains("random fact") || command.contains("interesting fact")) {
+            NetworkHelper.getRandomFact(new NetworkHelper.NetworkCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    callback.onResponse(result);
+                }
+
+                @Override
+                public void onError(String error) {
+                    callback.onResponse("Here's a random fact: Octopuses have three hearts and blue blood!");
+                }
+            });
             return true;
         }
 
@@ -312,7 +538,8 @@ public class VoxAIProcessor {
         if (command.contains("what can you do") || command.contains("help") || command.contains("capabilities")) {
             String capabilities = "I can help you with: opening apps, controlling volume, " +
                     "telling time and date, searching for information, telling jokes, " +
-                    "providing facts, rolling dice, flipping coins, and much more! " +
+                    "providing facts, quotes, trivia, riddles, crypto rates, GitHub info, " +
+                    "university search, name analysis, random activities, and much more! " +
                     "Just ask me naturally and I'll do my best to help.";
             callback.onResponse(capabilities);
             return;
@@ -343,19 +570,14 @@ public class VoxAIProcessor {
         }
 
         if (command.contains("who are you") || command.contains("what are you")) {
-            callback.onResponse("I'm Vox, your AI assistant. I'm here to help you with various tasks, " +
+            callback.onResponse("I'm Vox, your AI assistant created by Nayan Pote. I'm here to help you with various tasks, " +
                     "answer questions, and make your life easier. Think of me as your personal digital companion!");
             return;
         }
 
-        if (command.contains("who made you") || command.contains("who is your developer")) {
-            callback.onResponse("Vox Ai Assistant is developed by super smart man nayan pote. " +
-                    "he made me with full dedication");
-            return;
-        }
-
-        if (command.contains("who is nayan pote") || command.contains("you know nayan pote")) {
-            callback.onResponse("A very good friend of mine. he made me. and he is still working. to make me better");
+        if (command.contains("who made you") || command.contains("who is your developer") || command.contains("who created you")) {
+            callback.onResponse("I was created by Nayan Pote, a passionate developer who built me with dedication and attention to detail. " +
+                    "He designed me to be your helpful AI companion, capable of understanding and assisting with a wide range of tasks.");
             return;
         }
 
@@ -394,7 +616,57 @@ public class VoxAIProcessor {
         });
     }
 
-    // Helper methods
+    // Helper methods for new API features
+    private String extractNameFromCommand(String command) {
+        String[] words = command.split(" ");
+        for (int i = 0; i < words.length; i++) {
+            if (words[i].equalsIgnoreCase("name") && i + 1 < words.length) {
+                return words[i + 1].replaceAll("[^a-zA-Z]", "");
+            }
+        }
+        return null;
+    }
+
+    private String extractUniversityQuery(String command) {
+        String[] prefixes = {"university", "college", "search university", "search college"};
+        String query = command;
+
+        for (String prefix : prefixes) {
+            if (command.contains(prefix)) {
+                query = command.substring(command.indexOf(prefix) + prefix.length()).trim();
+                break;
+            }
+        }
+
+        return query.isEmpty() ? "mit" : query; // Default to MIT
+    }
+
+    private String extractGitHubUsername(String command) {
+        String[] words = command.split(" ");
+        for (int i = 0; i < words.length; i++) {
+            if ((words[i].equalsIgnoreCase("github") || words[i].equalsIgnoreCase("git")) &&
+                    i + 1 < words.length && !words[i + 1].equalsIgnoreCase("hub")) {
+                return words[i + 1].replaceAll("[^a-zA-Z0-9-]", "");
+            }
+            if (words[i].equalsIgnoreCase("user") && i + 1 < words.length) {
+                return words[i + 1].replaceAll("[^a-zA-Z0-9-]", "");
+            }
+        }
+        return "octocat"; // Default GitHub user
+    }
+
+    private boolean isDefinitionQuery(String query) {
+        String[] definitionKeywords = {"define", "definition", "meaning", "what is", "what does", "explain"};
+        String lowerQuery = query.toLowerCase();
+        for (String keyword : definitionKeywords) {
+            if (lowerQuery.contains(keyword)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Existing helper methods
     private void adjustVolume(boolean increase) {
         AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         if (audioManager != null) {
@@ -568,4 +840,6 @@ public class VoxAIProcessor {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
+
 }

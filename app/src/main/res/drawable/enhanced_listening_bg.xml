@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:angle="0"
+        android:startColor="@color/ai_background_elevated"
+        android:centerColor="@color/ai_success_green"
+        android:endColor="@color/ai_background_elevated"
+        android:type="linear" />
+    <stroke
+        android:width="1dp"
+        android:color="@color/ai_success_green_glow" />
+    <corners android:radius="20dp" />
+</shape>

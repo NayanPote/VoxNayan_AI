@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Outer glow -->
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:centerX="0.5"
+                android:centerY="0.5"
+                android:gradientRadius="80dp"
+                android:startColor="#8000FFFF"
+                android:centerColor="#4000FFFF"
+                android:endColor="#0000FFFF" />
+        </shape>
+    </item>
+
+    <!-- Inner core -->
+    <item android:inset="20dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:centerX="0.5"
+                android:centerY="0.5"
+                android:gradientRadius="60dp"
+                android:startColor="#FF00FFFF"
+                android:centerColor="#CC0080FF"
+                android:endColor="#8800FFFF" />
+            <stroke
+                android:width="2dp"
+                android:color="#CC00FFFF" />
+        </shape>
+    </item>
+
+    <!-- Central core -->
+    <item android:inset="35dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:centerX="0.5"
+                android:centerY="0.5"
+                android:gradientRadius="45dp"
+                android:startColor="#FFFFFF"
+                android:centerColor="#AAFFFF"
+                android:endColor="#0080FF" />
+        </shape>
+    </item>
+
+</layer-list>

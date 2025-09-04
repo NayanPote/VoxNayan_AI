@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="160dp"
+    android:height="160dp"
+    android:viewportWidth="160"
+    android:viewportHeight="160">
+
+    <!-- Data ring -->
+    <path
+        android:pathData="M80,20 C115,20 140,45 140,80 C140,115 115,140 80,140 C45,140 20,115 20,80 C20,45 45,20 80,20"
+        android:strokeColor="@color/ai_tertiary_blue"
+        android:strokeWidth="2"
+        android:fillColor="@color/ai_glow_blue" />
+
+    <!-- Data streams -->
+    <path
+        android:pathData="M40,40 L120,40 M40,80 L120,80 M40,120 L120,120"
+        android:strokeColor="@color/ai_neural_pulse"
+        android:strokeWidth="1" />
+
+    <!-- Data nodes (converted circles to paths) -->
+    <path android:fillColor="@color/ai_processing_purple"
+        android:pathData="M43,40 A3,3 0 1,1 42.999,40" />
+    <path android:fillColor="@color/ai_processing_purple"
+        android:pathData="M83,40 A3,3 0 1,1 82.999,40" />
+    <path android:fillColor="@color/ai_processing_purple"
+        android:pathData="M123,40 A3,3 0 1,1 122.999,40" />
+    <path android:fillColor="@color/ai_processing_purple"
+        android:pathData="M43,80 A3,3 0 1,1 42.999,80" />
+    <path android:fillColor="@color/ai_processing_purple"
+        android:pathData="M123,80 A3,3 0 1,1 122.999,80" />
+    <path android:fillColor="@color/ai_processing_purple"
+        android:pathData="M43,120 A3,3 0 1,1 42.999,120" />
+    <path android:fillColor="@color/ai_processing_purple"
+        android:pathData="M83,120 A3,3 0 1,1 82.999,120" />
+    <path android:fillColor="@color/ai_processing_purple"
+        android:pathData="M123,120 A3,3 0 1,1 122.999,120" />
+</vector>

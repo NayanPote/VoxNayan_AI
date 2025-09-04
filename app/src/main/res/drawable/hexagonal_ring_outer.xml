@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="280dp"
+    android:height="280dp"
+    android:viewportWidth="280"
+    android:viewportHeight="280">
+
+    <path
+        android:pathData="M140,10 L210,50 L210,130 L140,170 L70,130 L70,50 Z"
+        android:strokeColor="@color/ai_hex_outer"
+        android:strokeWidth="3"
+        android:fillColor="@color/ai_transparent_10" />
+
+    <path
+        android:pathData="M140,20 L200,55 L200,125 L140,160 L80,125 L80,55 Z"
+        android:strokeColor="@color/ai_primary_cyan"
+        android:strokeWidth="1"
+        android:fillColor="@color/ai_transparent_10" />
+
+    <!-- Corner nodes converted to paths -->
+<!--    <path android:fillColor="@color/ai_neural_node"-->
+<!--        android:pathData="M144,10 A4,4 0 1,1 143.999,10" />-->
+<!--    <path android:fillColor="@color/ai_neural_node"-->
+<!--        android:pathData="M214,50 A4,4 0 1,1 213.999,50" />-->
+<!--    <path android:fillColor="@color/ai_neural_node"-->
+<!--        android:pathData="M214,130 A4,4 0 1,1 213.999,130" />-->
+<!--    <path android:fillColor="@color/ai_neural_node"-->
+<!--        android:pathData="M144,170 A4,4 0 1,1 143.999,170" />-->
+<!--    <path android:fillColor="@color/ai_neural_node"-->
+<!--        android:pathData="M74,130 A4,4 0 1,1 73.999,130" />-->
+<!--    <path android:fillColor="@color/ai_neural_node"-->
+<!--        android:pathData="M74,50 A4,4 0 1,1 73.999,50" />-->
+</vector>
